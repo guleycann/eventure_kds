@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Talep Oluştur</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Genel Ayarlar */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #5a67d8;
+        }
+
+        /* Form Stilleri */
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-group label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .form-group select,
+        .form-group input {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #5a67d8;
+        }
+
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #5a67d8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background-color: #434190;
+        }
+
+        /* Grafikler */
+        .charts {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .charts div {
+            flex: 1;
+            min-width: 400px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .charts h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            text-align: center;
+            color: #4a5568;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        /* Tablo */
+        .table-container {
+            margin-top: 20px;
+        }
+
+        .table-container h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #4a5568;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #5a67d8;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f4f4f9;
+        }
+
+        td button {
+            padding: 5px 10px;
+            background-color: #48bb78;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        td button:hover {
+            background-color: #2f855a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yeni Talep Oluştur</h1>
+        <div class="form-group">
+            <label for="etkinlikTuru">Etkinlik Türü:</label>
+            <select id="etkinlikTuru">
+                <option value="Düğün">Düğün</option>
+                <option value="Nişan">Nişan</option>
+                <option value="Kurumsal Etkinlik">Kurumsal Etkinlik</option>
+                <option value="Doğum Günü">Doğum Günü</option>
+                <option value="Antika Müzayedesi">Antika Müzayedesi</option>
+
+            </select>
+
+            <label for="kisiKapasitesi">Kişi Kapasitesi:</label>
+            <input type="number" id="kisiKapasitesi" placeholder="Örn: 200">
+
+            <label for="yil">Yıl:</label>
+            <select id="yil">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+            </select>
+
+            <button id="analizYap">Analiz Yap</button>
+        </div>
+
+        <div class="charts">
+            <div>
+                <h3>Talep Kapasite ve Bütçe Analizi</h3>
+                <canvas id="kapasiteButceGrafik"></canvas>
+            </div>
+            <div>
+                <h3>Mekan Fiyat Analizi</h3>
+                <canvas id="mekanFiyatGrafik"></canvas>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h3>Uygun Mekanlar</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mekan</th>
+                        <th>Minimum Kapasite</th>
+                        <th>Maksimum Kapasite</th>
+                        <th>Fiyat</th>
+                        <th>Fiyat Tipi</th>
+                        <th>İş Birliği Talebi</th>
+                    </tr>
+                </thead>
+                <tbody id="mekanListesi">
+                    <!-- Mekanlar buraya eklenecek -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="/js/yeni_talep.js"></script>
+</body>
+</html>

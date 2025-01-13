@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategori Analizleri</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px;
+        }
+        .chart-box {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 45%;
+            min-height: 400px;
+        }
+        select {
+            float: right;
+            padding: 5px 10px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .legend {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Kategori Analizleri</h1>
+
+<div class="chart-container">
+    <!-- En Popüler Etkinlikler -->
+    <div class="chart-box">
+        <h2>En Popüler Etkinlikler</h2>
+        <canvas id="pieChart"></canvas>
+    </div>
+    
+    <script src="/js/category-dashboard.js"></script>
+
+    <!-- Etkinlik Türlerine Göre Kişi Kapasiteleri -->
+    <div class="chart-box">
+        <h2>Etkinlik Türlerine Göre Kişi Kapasiteleri</h2>
+        <select id="barYearSelect" onchange="updateBarChart()">
+            <option value="2024" selected>2024</option>
+            <option value="2023">2023</option>
+        </select>
+        <canvas id="barChart"></canvas>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #FFC107;"></div> Düğün
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #28A745;"></div> Doğum Günü
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #17A2B8;"></div> Kurumsal Etkinlik
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #DC3545;"></div> Müzayede
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #6610F2;"></div> Nişan
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #6C757D;"></div> Evlilik Teklifi
+            </div>    
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/category-dashboard.js"></script>
+    
+   <!-- Gelir Getirileri -->
+    <div class="chart-box" style="width: 90%;">
+        <h2>Gelir Getirileri</h2>
+        <!-- Yıllara Göre Seçim -->
+        <select id="lineYearSelect" onchange="updateLineChart()">
+            <option value="2024" selected>2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+        </select>
+        <!-- Grafik -->
+        <canvas id="lineChart"></canvas>
+</div>
+
+</div>
+
+<script>
+    // --- En Popüler Etkinlikler: Tıklanabilir Pasta Grafiği ---
+    const pieChart = new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Düğün', 'Doğum Günü', 'Evlilik Teklifi', 'Nişan', 'Müzayede', 'Kurumsal Etkinlik'],
+            datasets: [{
+                data: [42, 21, 14, 7, 10, 6],
+                backgroundColor: ['#6A0DAD', '#FF4500', '#FF8C00', '#B22222', '#8B008B', '#1E90FF']
+            }]
+        },
+        options: {
+            plugins: { legend: { position: 'bottom' } },
+            onClick: function(event, elements) {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    const selectedCategory = this.data.labels[index];
+                    window.location.href = `category-detail.html?category=${encodeURIComponent(selectedCategory)}`;
+                }
+            }
+        }
+    });
+
+    // --- Etkinlik Türlerine Göre Kişi Kapasiteleri ---
+    const barData = {
+        2024: [
+            [8, 12, 15, 18, 22, 25, 18, 20, 15, 12, 10, 8],
+            [7, 10, 14, 16, 18, 20, 16, 18, 14, 11, 9, 7],
+            [5, 8, 10, 12, 14, 16, 12, 14, 10, 8, 6, 5],
+            [10, 14, 18, 20, 22, 24, 20, 22, 18, 14, 12, 10],
+            [6, 9, 12, 15, 18, 21, 15, 17, 12, 10, 7, 6], 
+            [5, 7, 9, 11, 13, 15, 10, 12, 8, 6, 5, 4]
+        ],
+        2023: [
+            [6, 10, 12, 14, 16, 18, 14, 16, 12, 10, 8, 6],
+            [5, 8, 11, 13, 15, 17, 13, 15, 11, 9, 7, 5],
+            [4, 6, 8, 10, 12, 14, 10, 12, 8, 6, 5, 4],
+            [8, 12, 16, 18, 20, 22, 18, 20, 16, 12, 10, 8],
+            [7, 10, 14, 18, 20, 23, 17, 19, 15, 12, 9, 7],
+            [6, 8, 10, 12, 14, 16, 12, 14, 10, 8, 6, 5]
+        ]
+    };
+
+    const barChart = new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: { labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'], datasets: [] },
+        options: { responsive: true, scales: { y: { beginAtZero: true, max: 30 } } }
+    });
+
+    function updateBarChart() {
+        const year = document.getElementById('barYearSelect').value;
+        barChart.data.datasets = barData[year].map((data, index) => ({
+            label: ['Düğün', 'Doğum Günü', 'Kurumsal Etkinlik', 'Müzayede', 'Nişan', 'Evlilik Teklifi'][index],
+            data,
+            backgroundColor: ['#FFC107', '#28A745', '#17A2B8', '#DC3545' , '#6610F2', '#6C757D'][index]
+        }));
+        barChart.update();
+    }
+    updateBarChart();
+
+    // --- Gelir Getirileri: 12 Ay İçin ---
+    // --- Gelir Getirileri: Yıllara Göre Veriler ---
+    const lineChartData = {
+        2024: [
+            { label: 'Düğün', data: [10, 20, 25, 30, 40, 50, 60, 65, 70, 75, 80, 85], borderColor: '#28A745', fill: false },
+            { label: 'Doğum Günü', data: [15, 25, 35, 45, 50, 55, 60, 65, 70, 75, 80, 90], borderColor: '#6A0DAD', fill: false },
+            { label: 'Kurumsal Etkinlik', data: [12, 22, 32, 42, 52, 62, 72, 74, 76, 78, 80, 82], borderColor: '#00BCD4', fill: false },
+            { label: 'Nişan Töreni', data: [8, 18, 28, 38, 48, 58, 68, 70, 72, 74, 76, 78], borderColor: '#FFC107', fill: false },
+            { label: 'Müzayede', data: [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75], borderColor: '#FF4500', fill: false },
+            { label: 'Evlilik Teklifi', data: [18, 28, 38, 48, 58, 68, 78, 80, 82, 84, 86, 88], borderColor: '#DC3545', fill: false }
+        ],
+        2023: [
+            { label: 'Düğün', data: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60], borderColor: '#28A745', fill: false },
+            { label: 'Doğum Günü', data: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65], borderColor: '#6A0DAD', fill: false },
+            { label: 'Kurumsal Etkinlik', data: [8, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72], borderColor: '#00BCD4', fill: false },
+            { label: 'Nişan Töreni', data: [4, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60], borderColor: '#FFC107', fill: false },
+            { label: 'Müzayede', data: [7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62], borderColor: '#FF4500', fill: false },
+            { label: 'Evlilik Teklifi', data: [3, 8, 12, 18, 22, 28, 35, 40, 45, 50, 55, 60], borderColor: '#DC3545', fill: false }
+        ],
+        2022: [
+            { label: 'Düğün', data: [6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72], borderColor: '#28A745', fill: false },
+            { label: 'Doğum Günü', data: [9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99, 108], borderColor: '#6A0DAD', fill: false },
+            { label: 'Kurumsal Etkinlik', data: [8, 14, 22, 28, 36, 44, 52, 60, 68, 76, 84, 92], borderColor: '#00BCD4', fill: false },
+            { label: 'Nişan Töreni', data: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60], borderColor: '#FFC107', fill: false },
+            { label: 'Müzayede', data: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65], borderColor: '#FF4500', fill: false },
+            { label: 'Evlilik Teklifi', data: [7, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84], borderColor: '#DC3545', fill: false }
+        ]
+    };
+
+    // Line Chart Başlangıç (2024 Yılı)
+    const ctx = document.getElementById('lineChart').getContext('2d');
+    let lineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+            datasets: lineChartData['2024']
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'top' } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 10 } } }
+        }
+    });
+
+    // Yıl Değişikliğine Göre Grafiği Güncelle
+    function updateLineChart() {
+        const selectedYear = document.getElementById('lineYearSelect').value;
+        lineChart.data.datasets = lineChartData[selectedYear];
+        lineChart.update();
+    }
+   
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maliyet İstatistikleri</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 20px;
+        }
+
+        .chart-box {
+            width: 100%;
+            max-width: 700px;
+            height: 400px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        /* Dropdown Styling */
+        .dropdown {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 10; /* Açılır listeyi diğer elemanların üstüne getirir */
+        }
+
+        select {
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        /* Detail Section */
+        #details, #second-details {
+            display: none;
+            margin: 30px auto;
+            width: 90%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        #details h2, #second-details h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Legend for Wedding Concepts */
+        #wedding-legend {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #wedding-legend span {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+
+        /* Enlarged Pie Chart */
+        #pieChart {
+            max-width: 500px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page Title -->
+    <h1>Maliyet İstatistikleri</h1>
+
+    <!-- Main Chart -->
+    <div class="chart-container">
+        <div class="chart-box">
+            <div class="dropdown">
+                <label for="yearSelect">Yıl Seç:</label>
+                <select id="yearSelect" onchange="updateChart()">
+                    <option value="2024" selected>2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+            </div>
+            <canvas id="costChart"></canvas>
+        </div>
+    </div>
+    <script src="/js/cost-dashboard.js"></script>
+
+    
+
+    <!-- First Detail Section -->
+    <div id="details">
+        <h2 id="detail-title"></h2>
+        <div id="wedding-legend" style="display: none;">
+            <span style="background-color: #FF6384;"></span> Kır Düğünü
+            <span style="background-color: #36A2EB; margin-left: 10px;"></span> Kumsal Düğünü
+            <span style="background-color: #FFCE56; margin-left: 10px;"></span> Salon Düğünü
+        </div>
+        <canvas id="detailChart"></canvas>
+    </div>
+    <script src="/js/cost-dashboard.js"></script>
+
+
+    <!-- Second Detail Section -->
+    <!-- Second Detail Section -->
+    <div id="second-details" class="chart-container">
+        <div class="chart-box">
+            <div class="dropdown" style="top: 10px; right: 10px;">
+                <label for="yearSelectPie">Yıl Seç:</label>
+                <select id="yearSelectPie" onchange="updatePieChart()">
+                    <option value="2024" selected>2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+            </div>
+            <h2 style="text-align: center; margin-top: 10px;">Toplam Harcamaların Dağılımı</h2>
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+
+
+    <script>
+        const costDataByYear = {
+            "2024": [600000, 30000, 500000, 300000, 80000, 70000 ],
+            "2023": [400000, 20000, 400000, 200000, 70000, 60000],
+            "2022": [300000, 10000, 200000, 100000, 50000, 55000]
+        };
+
+        const pieDataByYear = {
+            "2024": [34, 26, 20, 20],
+            "2023": [30, 25, 25, 20],
+            "2022": [28, 22, 30, 20]
+        };
+
+        const eventLabels = ['Düğün', 'Doğum Günü', 'Kurumsal Etkinlik', 'Antika Müzayedesi', 'Nişan', 'Evlilik Teklifi'];
+        const barColors = ['#ad6fe4', '#f77591', '#fed271', '#c4c6db', '#85e3ff', '#a8df65' ];
+
+        let costChart, detailChart, pieChart;
+
+        function renderChart(year) {
+            const ctx = document.getElementById('costChart').getContext('2d');
+            if (costChart) costChart.destroy();
+            costChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: eventLabels,
+                    datasets: [{
+                        label: 'Ortalama Maliyet (₺)',
+                        data: costDataByYear[year],
+                        backgroundColor: barColors,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            showDetails(eventLabels[index]);
+                        }
+                    }
+                }
+            });
+        }
+
+        function showDetails(eventType) {
+            document.getElementById('details').style.display = 'block';
+            document.getElementById('second-details').style.display = 'block';
+            const detailTitle = document.getElementById('detail-title');
+            const detailCtx = document.getElementById('detailChart').getContext('2d');
+            const weddingLegend = document.getElementById('wedding-legend');
+
+            detailTitle.innerHTML = `${eventType} Detayları <br> Kişi Kapasitesine Bağlı Maliyetler`;
+;
+
+            if (detailChart) detailChart.destroy();
+
+            if (eventType === 'Düğün') {
+                weddingLegend.style.display = 'block';
+                detailChart = new Chart(detailCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['0-50', '50-100', '100-300', '300-500'],
+                        datasets: [
+                            { label: 'Kır Düğünü', data: [12000, 18000, 22000, 28000], borderColor: '#FF6384', type: 'line', fill: false },
+                            { label: 'Kumsal Düğünü', data: [10000, 16000, 21000, 26000], borderColor: '#36A2EB', type: 'line', fill: false },
+                            { label: 'Salon Düğünü', data: [14000, 19000, 24000, 30000], borderColor: '#FFCE56', type: 'line', fill: false },
+                            { label: 'Sütun', data: [15000, 20000, 25000, 30000], backgroundColor: '#5E60CE', type: 'bar' }
+                        ]
+                    },
+                    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                });
+            } else {
+                weddingLegend.style.display = 'none';
+                detailChart = new Chart(detailCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['0-50', '50-100', '100-300', '300-500'],
+                        datasets: [{ label: `${eventType} Maliyeti`, data: [15000, 20000, 25000, 30000], backgroundColor: '#5E60CE' }]
+                    }
+                });
+            }
+
+            updatePieChart();
+        }
+
+        function updateChart() {
+            const year = document.getElementById('yearSelect').value;
+            renderChart(year);
+        }
+
+        function updatePieChart() {
+            const year = document.getElementById('yearSelectPie').value;
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            if (pieChart) pieChart.destroy();
+            pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Mekan Ücreti', 'Yiyecek-İçecek', 'Dekorasyon', 'Ekstra Hizmetler'],
+                    datasets: [{
+                        data: pieDataByYear[year],
+                        backgroundColor: ['#5B4FBE', '#F76C6C', '#F9B85C', '#4ECDC4']
+                    }]
+                }
+            });
+        }
+         function updateChart() {
+            const year = document.getElementById('yearSelect').value;
+            renderChart(year);
+        }
+
+        renderChart("2024");
+        updatePieChart();
+    </script>
+</body>
+</html>

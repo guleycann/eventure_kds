@@ -1,0 +1,197 @@
+/* Genel body stilleri */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+
+/* Login ekranına özel */
+body.login-body {
+    background: url('/images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Main ekranına özel */
+body.main-body {
+    background-color: #f9f9f9;
+}
+
+/* Kontrol paneline özel */
+body.dashboard-body {
+    background-color: #f9f9f9;
+    display: block;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Login ekranı container */
+.login-container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+/* Login ekranı başlık */
+.login-container h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Login ekranı form alanları */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Login ekranı butonu */
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #b37fb4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #b37fb4;
+}
+
+/* Main ekranı container */
+.main-container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+/* Main ekranı başlık */
+.main-container h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Butonların düzenlenmesi */
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #b37fb4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color:#b37fb4;
+}
+
+/* Kontrol paneli için başlıklar */
+.dashboard-header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* Kontrol paneli için bölümler */
+.dashboard-section {
+    background: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* KPI kutuları */
+.kpi-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.kpi {
+    background: #e8f5e9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+}
+
+.kpi h3 {
+    color: #000000;
+    margin-bottom: 10px;
+}
+
+.kpi p {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Hızlı erişim butonları */
+.quick-buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.quick-buttons button {
+    padding: 15px 20px;
+    background:#b37fb4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.quick-buttons button:hover {
+    background:#b37fb4;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+

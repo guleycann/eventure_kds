@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontrol Paneli</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Arka plan resmi */
+        body.dashboard-body {
+            position: relative;
+            background: url('/images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+
+        }
+
+        body.dashboard-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: none;
+        }
+
+        header h1 {
+            position: absolute;
+            top: 0.5rem; /* Üstten boşluk */
+            left: 50%; /* Ortalamak için */
+            transform: translateX(-50%); /* Yatay ortalamayı tamamlamak için */
+            background: #b37fb4;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1.5rem;
+            z-index: 10; /* Üstte görünmesi için */
+            margin-bottom: 1rem;
+        }
+
+
+        nav {
+            position: absolute; /* Sağ üst köşeye sabitlemek için */
+            top: 2rem; /* Üstten boşluk */
+            right: 1rem; /* Sağdan boşluk */
+            display: flex; /* Linkleri yan yana göstermek için */
+            gap: 1rem; /* Linkler arasındaki boşluk */
+            z-index: 10; /* Üstte görünmesi için */
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            background: #b37fb4; /* Arka plan rengi */
+            padding: 0.5rem 1rem; /* İçerik boşluğu */
+            border-radius: 8px; /* Kenarları yuvarlak yap */
+            transition: background 0.3s ease; /* Hover efekti için geçiş */
+        }
+
+        nav ul li a:hover {
+            background: #a15fa3; /* Hover sırasında arka plan rengi */
+        }
+
+        /* Ana içerik */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .section-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 300px;
+        }
+
+        #genel-bakis {
+            background-color: #b37fbf;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        #genel-bakis .kpi {
+            background-color: white;
+            color: #333;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
+
+        /* Hızlı Erişim */
+        .quick-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quick-buttons button {
+            background: #b37fb4;
+            color:black;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .quick-buttons .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .quick-buttons .dropbtn {
+            background: #b37fb4;
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .quick-buttons .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        .quick-buttons .dropdown-content a {
+            color: black;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .quick-buttons .dropdown-content a:hover {
+            background-color: #b37fb4;
+            color: white;
+        }
+
+        .quick-buttons .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed; /* Her zaman altta sabit */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            background: #b37fb4;
+            color: white;
+            padding: 1rem; /* Daha ince yapmak için padding azaltıldı */
+            font-size: 0.95rem; /* Yazı boyutu küçültüldü */
+            z-index: 10;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Hafif gölge efekti */
+        }
+
+
+    </style>
+</head>
+<body class="dashboard-body">
+    <header>
+        <h1>Eventure Kontrol Paneli</h1>
+        <nav>
+            <ul>
+                <li><a href="#genel-bakis">Genel Bakış</a></li>
+                <li><a href="#son-aktiviteler">Son Aktiviteler</a></li>
+                <li><a href="#hizli-erisim">Hızlı Erişim</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="section-container">
+            <!-- Genel Bakış -->
+            <section id="genel-bakis">
+                <h2>Genel Bakış</h2>
+                <div class="kpi">
+                    <h3>Toplam Müşteri Talepleri</h3>
+                    <p>90</p>
+                </div>
+                <div class="kpi">
+                    <h3>Tamamlanan Anlaşmalar</h3>
+                    <p>85</p>
+                </div>
+                <div class="kpi">
+                    <h3>Mekan İş Birliği</h3>
+                    <p>35</p>
+                </div>
+            </section>
+
+           <!-- Son Aktiviteler -->
+            <section id="son-aktiviteler">
+                <h2>Son Aktiviteler</h2>
+                <ul id="son-aktiviteler-listesi">
+                    <!-- Dinamik olarak buraya veriler eklenecek -->
+                </ul>
+            </section>
+
+            <!-- Hızlı Erişim -->
+            <section id="hizli-erisim">
+                <h2>Hızlı Erişim</h2>
+                <div class="quick-buttons">
+                    <div class="dropdown">
+                        <button class="dropbtn">Raporları Görüntüle</button>
+                        <div class="dropdown-content">
+                            <a href="/category-dashboard">Kategori Analizleri</a>
+                            <a href="/cost-dashboard">Maliyet İstatistikleri</a>
+                        </div>
+                    </div>
+                    <button onclick="window.location.href='yeni_talep.html';">Yeni Talep Oluştur</button>
+                    <button onclick="location.href='paket_analizi.html'">Paket Analizleri</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Eventure. Tüm hakları saklıdır.</p>
+    </footer>
+
+
+    <script src="js/main.js"></script>
+</body>
+</html>

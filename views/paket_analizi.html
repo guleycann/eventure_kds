@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paket Fiyat-Performans Analizi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .controls div {
+            flex: 1;
+            text-align: center;
+        }
+
+        .controls label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .controls select, .controls input[type="range"] {
+            width: 90%;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        canvas#bubbleChart {
+            max-width: 95%;
+            height: 300px;
+            margin: auto;
+        }
+
+        .details {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .details h3 {
+            margin-bottom: 10px;
+        }
+
+        .details ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        button.reset-btn {
+            margin-top: 5px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button.reset-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Paket Fiyat-Performans Analizi</h1>
+        </header>
+        <main>
+            <div class="controls">
+                <div>
+                    <label for="eventType">Etkinlik Türü:</label>
+                    <select id="eventType">
+                        <option value="" disabled selected>Seçiniz</option>
+                        <option value="Düğün">Düğün</option>
+                        <option value="Nişan">Nişan</option>
+                        <option value="Kurumsal Etkinlik">Kurumsal Etkinlik</option>
+                        <option value="Doğum Günü">Doğum Günü</option>
+                        <option value="Antika Müzayedesi">Antika Müzayedesi</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="yearSelect">Yıl:</label>
+                    <select id="yearSelect">
+                        <option value="" disabled selected>Seçiniz</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div>
+                    <label for="sliderA">Paket A</label>
+                    <input type="range" id="sliderA" min="5000" max="200000" value="0">
+                    <span id="sliderAValue">--</span>
+                    <ul id="sliderAEffect">
+                        <li>Değişim: 0₺</li>
+                        <li>Karlılık: <span id="sliderAProfit">--</span>₺</li>
+                        <li>Tercih Oranı: <span id="sliderAPreference">--</span>%</li>
+                    </ul>
+                    <button class="reset-btn" onclick="resetBubble('Paket A')">Reset</button>
+                </div>
+                <div>
+                    <label for="sliderB">Paket B</label>
+                    <input type="range" id="sliderB" min="5000" max="200000" value="0">
+                    <span id="sliderBValue">--</span>
+                    <ul id="sliderBEffect">
+                        <li>Değişim: 0₺</li>
+                        <li>Karlılık: <span id="sliderBProfit">--</span>₺</li>
+                        <li>Tercih Oranı: <span id="sliderBPreference">--</span>%</li>
+                    </ul>
+                    <button class="reset-btn" onclick="resetBubble('Paket B')">Reset</button>
+                </div>
+                <div>
+                    <label for="sliderC">Paket C</label>
+                    <input type="range" id="sliderC" min="5000" max="200000" value="0">
+                    <span id="sliderCValue">--</span>
+                    <ul id="sliderCEffect">
+                        <li>Değişim: 0₺</li>
+                        <li>Karlılık: <span id="sliderCProfit">--</span>₺</li>
+                        <li>Tercih Oranı: <span id="sliderCPreference">--</span>%</li>
+                    </ul>
+                    <button class="reset-btn" onclick="resetBubble('Paket C')">Reset</button>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="bubbleChart"></canvas>
+            </div>
+
+            <div class="details">
+                <h3 id="packageTitle">Paket Detayları</h3>
+                <ul id="packageDetails">
+                    <li>Detaylar burada görünecek...</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/paket_analizi.js"></script>
+</body>
+</html>
